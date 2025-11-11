@@ -1,0 +1,70 @@
+version: '3'
+
+vars:
+  JEXTRACT_VERSION: '25'
+  JEXTRACT_BUILD: '1'
+  JEXTRACT_URL: 'https://download.java.net/java/early_access/jextract/25/1/openjdk-25-jextract+1-1_linux-x64_bin.tar.gz'
+  JEXTRACT_DIR: '.local/jextract-25'
+  JEXTRACT_BIN: '{{.JEXTRACT_DIR}}/bin/jextract'
+
+tasks:
+  default:
+    desc: "Build the entire project (downloads jextract if needed, then runs maven build)"
+    cmds:
+      - task: setup-jextract
+      - task: build
+
+  setup-jextract:
+    desc: "Download and extract jextract to .local/ directory"
+    status:
+      - test -f {{.JEXTRACT_BIN}}
+    cmds:
+      - echo "Downloading jextract {{.JEXTRACT_VERSION}}+{{.JEXTRACT_BUILD}}..."
+      - mkdir -p .local
+      - curl -L -o .local/jextract.tar.gz {{.JEXTRACT_URL}}
+      - echo "Extracting jextract..."
+      - tar -xzf .local/jextract.tar.gz -C .local
+      - rm .local/jextract.tar.gz
+      - chmod +x {{.JEXTRACT_BIN}}
+      - echo "jextract installed to {{.JEXTRACT_DIR}}"
+      - "{{.JEXTRACT_BIN}} --version"
+
+  clean-jextract:
+    desc: "Remove downloaded jextract installation"
+    cmds:
+      - rm -rf .local/jextract-*
+      - echo "jextract installation removed"
+
+  build:
+    desc: "Build all Maven modules"
+    cmds:
+      - ./mvnw clean install
+    sources:
+      - "**/src/**/*.java"
+    generates:
+      - "**/target/classes/**"
+
+  compile:
+    desc: "Compile without running tests"
+    cmds:
+      - task: setup-jextract
+      - mvn compile
+
+  clean:
+    desc: "Clean Maven build artifacts"
+    cmds:
+      - ./mvnd clean
+
+  run-posix-receiver:
+    desc: "Run the POSIX queue receiver example"
+    deps:
+      - build
+    cmds:
+      - java -cp foreign-posix-queue/target/classes pl.symentis.workshops.foreign.posix.PosixQueueReceiver
+
+  run-posix-sender:
+    desc: "Run the POSIX queue sender example"
+    deps:
+      - build
+    cmds:
+      - java -cp foreign-posix-queue/target/classes pl.symentis.workshops.foreign.posix.PosixQueueSender

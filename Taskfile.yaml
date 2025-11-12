@@ -37,6 +37,8 @@ tasks:
 
   build:
     desc: "Build all Maven modules"
+    deps:
+      - setup-jextract
     cmds:
       - ./mvnw clean install
     sources:

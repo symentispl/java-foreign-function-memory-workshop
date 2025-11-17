@@ -24,7 +24,7 @@ import static java.lang.foreign.MemoryLayout.PathElement.groupElement;
 public class Example7 {
 
     static void main() throws Throwable {
-        try (var arena = Arena.ofConfined()) {
+        try (var arena = Arena.ofAuto()) {
 
             var structLayout = MemoryLayout.structLayout(
                     ValueLayout.JAVA_LONG.withName("year"),
@@ -54,7 +54,8 @@ public class Example7 {
             out.printf("timezone offset using method handler is %d%n", timezoneOffsetmethodHandle.invoke(0));
 
             // even more magic with method handle, this time volatile access mode
-            timezoneOffsetmethodHandle = timezoneOffsetVarHandler.toMethodHandle(VarHandle.AccessMode.GET_VOLATILE);
+            timezoneOffsetmethodHandle = timezoneOffsetVarHandler.toMethodHandle(VarHandle.AccessMode.SET_RELEASE);
+            timezoneOffsetmethodHandle = timezoneOffsetVarHandler.toMethodHandle(VarHandle.AccessMode.SET_RELEASE);
             out.printf(
                     "timezone offset using method handler is volatile access is %d%n",
                     timezoneOffsetmethodHandle.invoke(memorySegment, 0));

@@ -55,7 +55,10 @@ public class PosixQueueReceiver {
                 throw new RuntimeException("failed to mq_getattr with errno %d".formatted(errno));
             }
 
-            out.printf("opened POSIX queue %s with attributes (max message: %d) (max message size: %d bytes)\n", queueName, mq_attr.mq_maxmsg(posixQueueAttributes), mq_attr.mq_msgsize(posixQueueAttributes));
+            out.printf("opened POSIX queue %s with attributes (max message: %d) (max message size: %d bytes)\n",
+                    queueName,
+                    mq_attr.mq_maxmsg(posixQueueAttributes),
+                    mq_attr.mq_msgsize(posixQueueAttributes));
 
             var messageSize = mq_attr.mq_msgsize(posixQueueAttributes);
             var msg = arena.allocate(messageSize);

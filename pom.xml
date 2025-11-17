@@ -19,6 +19,7 @@
         <module>foreign-functions</module>
         <module>foreign-posix-queue</module>
         <module>foreign-memory</module>
+        <module>foreign-metrics-store</module>
     </modules>
 
 </project>

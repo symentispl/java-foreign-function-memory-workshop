@@ -31,7 +31,7 @@ public class GetPIDExample {
                 symbolLookup.find("getpid").orElseThrow(() -> new RuntimeException("getpid symbol not found"));
 
         var functionDescriptor = FunctionDescriptor.of(ValueLayout.JAVA_INT);
-
+        System.out.println(getpidSymbol);
         var methodHandle = linker.downcallHandle(getpidSymbol, functionDescriptor);
         System.out.println("PID: "+methodHandle.invoke());
     }

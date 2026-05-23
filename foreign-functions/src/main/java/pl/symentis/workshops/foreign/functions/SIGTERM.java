@@ -54,7 +54,7 @@ public class SIGTERM {
         var signalHandle =
                 linker.downcallHandle(signal, FunctionDescriptor.ofVoid(ValueLayout.JAVA_INT, ValueLayout.ADDRESS));
         out.println(signalHandle.type());
-        signalHandle.invoke(15, signalHandlerStub);
+        signalHandle.invoke( 15, signalHandlerStub);
 
         out.println("Press <ENTER> to quit");
         System.in.read();

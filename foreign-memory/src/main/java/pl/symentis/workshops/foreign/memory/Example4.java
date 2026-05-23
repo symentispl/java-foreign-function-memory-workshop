@@ -1,15 +1,16 @@
 package pl.symentis.workshops.foreign.memory;
 
 import java.lang.foreign.Arena;
+import java.lang.ref.ReferenceQueue;
 
 /**
  * The Example4 class demonstrates the use of the Foreign Memory API with an automatic memory scope.
- *
+ * <p>
  * Key points about the class:
  * - Utilizes the `Arena.ofAuto()` method to allocate memory with an automatic scope.
  * - Memory allocated in this scope is automatically managed and cleared when the garbage collector
  *   removes the associated memory segment.
- *
+ * <p>
  * This example focuses on showcasing the use of automatic memory arenas to efficiently manage memory
  * without requiring manual management or explicit resource closure.
  */

@@ -13,12 +13,12 @@ import static java.lang.System.out;
  * The Example6 class demonstrates the use of the Foreign Memory API for working with memory segments
  * and sequence-based memory layouts in Java. It showcases how to allocate memory for a sequence layout,
  * manipulate values within the sequence using a VarHandle, and retrieve metadata about the method handle types.
- *
+ * <p>
  * Key features demonstrated in this class:
  * - Allocating a sequence layout consisting of 16 elements, each corresponding to the size of a Java int.
  * - Using VarHandle to access and modify specific elements of the sequence layout.
  * - Printing and understanding method handle types generated from VarHandle for different access modes.
- *
+ * <p>
  * This class is an example of confined memory usage, ensuring the allocated memory is managed
  * within the scope of the arena and released properly upon completion.
  */
@@ -28,10 +28,10 @@ public class Example6 {
         MemorySegment memorySegment;
         try (var arena = Arena.ofConfined()) {
             // create array of 16 elements of Java int size
-            var sequenceLayout = MemoryLayout.sequenceLayout(16, ValueLayout.JAVA_INT);
+            var sequenceLayout = MemoryLayout.sequenceLayout(16, ValueLayout.JAVA_DOUBLE);
             memorySegment = arena.allocate(sequenceLayout);
             var varHandle = sequenceLayout.varHandle(PathElement.sequenceElement(1));
-            varHandle.set(memorySegment, 0, 666);
+            varHandle.setVolatile(memorySegment, 0, 666);
             var value = varHandle.get(memorySegment, 0);
             out.printf("value at index zero is %d%n", value);
             out.printf(

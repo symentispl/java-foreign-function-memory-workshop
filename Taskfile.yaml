@@ -70,3 +70,20 @@ tasks:
       - build
     cmds:
       - java -cp foreign-posix-queue/target/classes pl.symentis.workshops.foreign.posix.PosixQueueSender
+
+  compile-posix-sender-c:
+    desc: "Compile the pure C POSIX queue sender example"
+    cmds:
+      - mkdir -p foreign-posix-queue/target/c
+      - gcc -Wall -o foreign-posix-queue/target/c/posix_queue_sender foreign-posix-queue/src/main/c/posix_queue_sender.c -lrt
+    sources:
+      - foreign-posix-queue/src/main/c/posix_queue_sender.c
+    generates:
+      - foreign-posix-queue/target/c/posix_queue_sender
+
+  run-posix-sender-c:
+    desc: "Run the pure C POSIX queue sender example"
+    deps:
+      - compile-posix-sender-c
+    cmds:
+      - ./foreign-posix-queue/target/c/posix_queue_sender
